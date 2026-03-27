@@ -93,6 +93,10 @@ public enum ConstraintType: String, Codable, Sendable {
     case top         = "TOP"
     case bottom      = "BOTTOM"
     case topBottom   = "TOP_BOTTOM"
+    // Plugin API aliases
+    case min         = "MIN"
+    case max         = "MAX"
+    case stretch     = "STRETCH"
 }
 
 public struct FigmaConstraints: Codable, Sendable {
