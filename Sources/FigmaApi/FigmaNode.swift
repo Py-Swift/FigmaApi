@@ -219,7 +219,7 @@ public struct FigmaNode: Codable, Sendable {
     // MARK: IsLayerTrait — present on every node
 
     /// Unique stable node ID within the document (e.g. `"1:2"`).
-    public let id: String
+    public let id: String?
     /// Layer name as shown in the Figma layers panel.
     public let name: String
     /// Node type discriminator.
@@ -310,14 +310,14 @@ public struct FigmaNode: Codable, Sendable {
     public let counterAxisSpacing: Double?
     public let itemReverseZIndex: Bool?
     public let strokesIncludedInLayout: Bool?
-    /// Number of columns this node spans inside a GRID-mode parent. Default 1.
-    public let gridColumnSpan: Int?
-    /// Number of rows this node spans inside a GRID-mode parent. Default 1.
+    /// Number of columns in a GRID-mode layout (Plugin API: gridColumnCount).
+    public let gridColumnCount: Int?
+    /// Number of rows in a GRID-mode layout (Plugin API: gridRowCount).
     public let gridRowCount: Int?
-    /// Column index this node anchors to inside a GRID-mode parent. Default 0.
-    public let gridColumnAnchorIndex: Int?
-    /// Row index this node anchors to inside a GRID-mode parent. Default 0.
-    public let gridRowAnchorIndex: Int?
+    /// Horizontal gap between grid cells (Plugin API only).
+    public let gridColumnGap: Double?
+    /// Vertical gap between grid cells (Plugin API only).
+    public let gridRowGap: Double?
 
     // MARK: MinimalFillsTrait + MinimalStrokesTrait
 
