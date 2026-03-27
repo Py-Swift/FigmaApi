@@ -18,17 +18,30 @@ public struct FigmaColor: Codable, Hashable, Sendable {
         self.r = r; self.g = g; self.b = b; self.a = a
     }
 
-    /// Kivy-style RGBA tuple string: ``(r, g, b, a)``
-    public var kivyRGBA: String {
-        String(format: "(%.4f, %.4f, %.4f, %.4f)", r, g, b, alpha)
+    private static let hexTable: [Character] =
+        ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"]
+
+    private static func hex(_ value: Double) -> (Character, Character) {
+        let i = Int((value * 255).rounded()).clamped(to: 0...255)
+        return (hexTable[(i >> 4) & 0xF], hexTable[i & 0xF])
     }
 
-    /// CSS-style #RRGGBB hex string (ignores alpha)
+    /// CSS-style hex string: `#RRGGBB` when fully opaque, `#RRGGBBAA` otherwise.
     public var cssHex: String {
-        let ri = Int((r * 255).rounded())
-        let gi = Int((g * 255).rounded())
-        let bi = Int((b * 255).rounded())
-        return String(format: "#%02x%02x%02x", ri, gi, bi)
+        let (r0, r1) = Self.hex(r)
+        let (g0, g1) = Self.hex(g)
+        let (b0, b1) = Self.hex(b)
+        if alpha >= 1.0 {
+            return String(["#", r0, r1, g0, g1, b0, b1])
+        } else {
+            let (a0, a1) = Self.hex(alpha)
+            return String(["#", r0, r1, g0, g1, b0, b1, a0, a1])
+        }
+    }
+
+    /// Kivy-style RGBA tuple string: `(r, g, b, a)` with 4 decimal places.
+    public var kivyRGBA: String {
+        "(\(r.rounded4), \(g.rounded4), \(b.rounded4), \(alpha.rounded4))"
     }
 }
 
@@ -54,4 +67,25 @@ public struct FigmaVector2: Codable, Hashable, Sendable {
     public let y: Double
 
     public init(x: Double, y: Double) { self.x = x; self.y = y }
+}
+
+// MARK: - Internal helpers (no Foundation)
+
+extension Comparable {
+    func clamped(to range: ClosedRange<Self>) -> Self {
+        min(max(self, range.lowerBound), range.upperBound)
+    }
+}
+
+extension Double {
+    /// String representation rounded to 4 decimal places, no Foundation needed.
+    var rounded4: String {
+        let scaled = (self * 10_000).rounded()
+        let int = Int(scaled)
+        let whole = int / 10_000
+        let frac  = abs(int % 10_000)
+        let fracStr = String(frac)
+        let padded  = String(repeating: "0", count: 4 - fracStr.count) + fracStr
+        return "\(whole).\(padded)"
+    }
 }

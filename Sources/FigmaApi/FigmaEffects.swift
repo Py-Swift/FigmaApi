@@ -7,6 +7,8 @@ public enum EffectType: String, Codable, Sendable {
     case dropShadow        = "DROP_SHADOW"
     case layerBlur         = "LAYER_BLUR"
     case backgroundBlur    = "BACKGROUND_BLUR"
+    case texture           = "TEXTURE"
+    case noise             = "NOISE"
 }
 
 // MARK: - BlendMode
@@ -55,6 +57,18 @@ public struct FigmaEffect: Codable, Sendable {
     /// Whether shadow uses "show shadow behind transparent areas"
     public let showShadowBehindNode: Bool?
 
+    // MARK: TEXTURE effect fields
+
+    /// Size of the texture. Present when `type == .texture`.
+    public let noiseSize: Double?
+    /// Whether the texture is clipped to the node shape. Present when `type == .texture`.
+    public let clipToShape: Bool?
+
+    // MARK: NOISE effect fields
+
+    /// Density of the noise effect, 0–1. Present when `type == .noise`.
+    public let density: Double?
+
     public var isVisible: Bool { visible ?? true }
 }
 
@@ -67,10 +81,16 @@ public enum ExportFormat: String, Codable, Sendable {
     case pdf = "PDF"
 }
 
+/// Sizing constraint attached to an export setting.
+public struct FigmaExportConstraint: Codable, Sendable {
+    /// `"SCALE"` | `"WIDTH"` | `"HEIGHT"`
+    public let type: String
+    /// Scale factor (SCALE) or target dimension in px (WIDTH / HEIGHT).
+    public let value: Double
+}
+
 public struct FigmaExportSetting: Codable, Sendable {
     public let format: ExportFormat
-    public let suffix: String?
-    /// Constraint type: "SCALE" | "WIDTH" | "HEIGHT"
-    public let constraintType: String?
-    public let constraintValue: Double?
+    public let suffix: String
+    public let constraint: FigmaExportConstraint
 }

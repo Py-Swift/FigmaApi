@@ -9,6 +9,7 @@ public enum PaintType: String, Codable, Sendable {
     case gradientAngular = "GRADIENT_ANGULAR"
     case gradientDiamond = "GRADIENT_DIAMOND"
     case image           = "IMAGE"
+    case pattern         = "PATTERN"
     case emoji           = "EMOJI"
     case video           = "VIDEO"
 }
@@ -21,6 +22,19 @@ public enum ScaleMode: String, Codable, Sendable {
     case tile    = "TILE"
     case stretch = "STRETCH"
     case crop    = "CROP"
+}
+
+// MARK: - ImageFilters
+
+/// Per-channel image adjustments applied to an IMAGE paint.
+public struct FigmaImageFilters: Codable, Sendable {
+    public let exposure: Double?
+    public let contrast: Double?
+    public let saturation: Double?
+    public let temperature: Double?
+    public let tint: Double?
+    public let highlights: Double?
+    public let shadows: Double?
 }
 
 // MARK: - GradientStop
@@ -54,6 +68,9 @@ public struct FigmaPaint: Codable, Sendable {
     /// Colour stops defining the gradient
     public let gradientStops: [FigmaGradientStop]?
 
+    /// Blend mode for this paint layer.
+    public let blendMode: BlendMode?
+
     // MARK: IMAGE fields
     /// Image hash from Figma assets API
     public let imageRef: String?
@@ -63,6 +80,24 @@ public struct FigmaPaint: Codable, Sendable {
     public let imageTransform: [[Double]]?
     /// Tile scale factor (scaleMode == TILE only)
     public let scalingFactor: Double?
+    /// Image rotation in degrees.
+    public let rotation: Double?
+    /// Image filters (exposure, contrast, saturation, etc.) applied to an IMAGE paint.
+    public let filters: FigmaImageFilters?
+    /// Reference to an animated GIF embedded in an IMAGE paint.
+    public let gifRef: String?
+
+    // MARK: PATTERN fields
+    /// Node ID of the source node used as the pattern tile.
+    public let sourceNodeId: String?
+    /// Tiling arrangement. `"RECTANGULAR"` | `"HORIZONTAL_HEXAGONAL"` | `"VERTICAL_HEXAGONAL"`
+    public let tileType: String?
+    /// Per-axis spacing between pattern tiles.
+    public let spacing: FigmaVector2?
+    /// Horizontal alignment within a tile. `"START"` | `"CENTER"` | `"END"`
+    public let horizontalAlignment: String?
+    /// Vertical alignment within a tile. `"START"` | `"CENTER"` | `"END"`
+    public let verticalAlignment: String?
 
     public var isVisible: Bool { visible ?? true }
     public var effectiveOpacity: Double { opacity ?? 1.0 }
@@ -84,8 +119,15 @@ public enum StrokeCap: String, Codable, Sendable {
     case square           = "SQUARE"
     case lineArrow        = "LINE_ARROW"
     case triangleArrow    = "TRIANGLE_ARROW"
+    case triangleFilled   = "TRIANGLE_FILLED"
     case circleFilled     = "CIRCLE_FILLED"
     case diamondFilled    = "DIAMOND_FILLED"
+    case washiTape1       = "WASHI_TAPE_1"
+    case washiTape2       = "WASHI_TAPE_2"
+    case washiTape3       = "WASHI_TAPE_3"
+    case washiTape4       = "WASHI_TAPE_4"
+    case washiTape5       = "WASHI_TAPE_5"
+    case washiTape6       = "WASHI_TAPE_6"
 }
 
 public enum StrokeJoin: String, Codable, Sendable {
