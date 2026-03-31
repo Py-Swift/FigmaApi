@@ -7,6 +7,7 @@
 public enum FigmaNodeType: String, Codable, Sendable {
     case document        = "DOCUMENT"
     case canvas          = "CANVAS"
+    case page            = "PAGE"
     case frame           = "FRAME"
     case group           = "GROUP"
     case section         = "SECTION"
@@ -17,6 +18,7 @@ public enum FigmaNodeType: String, Codable, Sendable {
     case star            = "STAR"
     case line            = "LINE"
     case ellipse         = "ELLIPSE"
+    case polygon         = "POLYGON"
     case regularPolygon  = "REGULAR_POLYGON"
     case rectangle       = "RECTANGLE"
     case booleanOperation = "BOOLEAN_OPERATION"
@@ -381,6 +383,14 @@ public struct FigmaNode: Codable, Sendable {
     public let characters: String?
     /// Typography style for the entire text node.
     public let style: FigmaTypeStyle?
+    /// Font size in points — Plugin API direct field on TextNode (REST API nests this in `style`).
+    public let fontSize: Double?
+    /// Font family + style — Plugin API direct field on TextNode (REST API nests this in `style`).
+    public let fontName: FigmaFontName?
+    /// Horizontal text alignment — Plugin API direct field on TextNode.
+    public let textAlignHorizontal: String?
+    /// Vertical text alignment — Plugin API direct field on TextNode.
+    public let textAlignVertical: String?
     /// Per-character style overrides; each value indexes into `styleOverrideTable`.
     public let characterStyleOverrides: [Int]?
     /// Map from override index → `FigmaTypeStyle`.

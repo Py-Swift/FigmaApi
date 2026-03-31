@@ -2,6 +2,16 @@
 ///
 /// Corresponds to `TypeStyle` in the Figma REST API OpenAPI spec.
 
+// MARK: - FigmaFontName
+
+/// Font family + weight/style string, as returned by the Figma Plugin API's `FontName` type.
+public struct FigmaFontName: Codable, Sendable {
+    /// Font family name, e.g. `"Inter"`
+    public let family: String
+    /// Weight/style string, e.g. `"Regular"`, `"Bold"`, `"Bold Italic"`, `"Italic"`
+    public let style: String
+}
+
 // MARK: - FigmaHyperlink
 
 /// A link to a URL or another node, embedded in a text run.
