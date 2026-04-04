@@ -101,6 +101,14 @@ public struct FigmaPaint: Codable, Sendable {
 
     public var isVisible: Bool { visible ?? true }
     public var effectiveOpacity: Double { opacity ?? 1.0 }
+
+    private enum CodingKeys: String, CodingKey {
+        case type, visible, opacity, color
+        case gradientHandlePositions, gradientStops, blendMode
+        case imageRef = "imageHash"   // Plugin API sends "imageHash"; REST API uses "imageRef"
+        case scaleMode, imageTransform, scalingFactor, rotation, filters, gifRef
+        case sourceNodeId, tileType, spacing, horizontalAlignment, verticalAlignment
+    }
 }
 
 // MARK: - StrokeAlign
