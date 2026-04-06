@@ -454,6 +454,12 @@ public struct FigmaNode: Codable, Sendable {
 
     public let devStatus: FigmaDevStatus?
 
+    // MARK: SVG export (canvas designer)
+
+    /// Set by the Figma plugin when a VECTOR node has been exported as SVG.
+    /// Used by `CanvasInstructionMapper` to emit a `CanvasSvgIR` instead of a plain rectangle.
+    public let svgId: String?
+
     // MARK: - Convenience
 
     public var isVisible: Bool { visible ?? true }
