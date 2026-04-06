@@ -209,6 +209,17 @@ public struct FigmaOverrides: Codable, Sendable {
     public let overriddenFields: [String]
 }
 
+// MARK: - FigmaVectorPath
+
+/// One path segment of a VECTOR node's geometry, as serialised by the Figma plugin.
+/// The `data` field is an SVG path `d` attribute string.
+public struct FigmaVectorPath: Codable, Sendable {
+    /// Winding rule for the path fill area ("EVENODD" or "NONZERO").
+    public let windingRule: String?
+    /// SVG path commands string (the `d` attribute value).
+    public let data: String
+}
+
 // MARK: - FigmaNode
 
 /// A single node in the Figma document tree, as returned by `GET /v1/files/:file_key`.
@@ -454,11 +465,11 @@ public struct FigmaNode: Codable, Sendable {
 
     public let devStatus: FigmaDevStatus?
 
-    // MARK: SVG export (canvas designer)
+    // MARK: VectorNode
 
-    /// Set by the Figma plugin when a VECTOR node has been exported as SVG.
-    /// Used by `CanvasInstructionMapper` to emit a `CanvasSvgIR` instead of a plain rectangle.
-    public let svgId: String?
+    /// Path geometry of a VECTOR node, included in the raw plugin JSON export.
+    /// Each entry contains an SVG path `d` string and the winding rule for that path.
+    public let vectorPaths: [FigmaVectorPath]?
 
     // MARK: - Convenience
 
