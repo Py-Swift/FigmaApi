@@ -211,13 +211,12 @@ public struct FigmaOverrides: Codable, Sendable {
 
 // MARK: - FigmaVectorPath
 
-/// One path segment of a VECTOR node's geometry, as serialised by the Figma plugin.
-/// The `data` field is an SVG path `d` attribute string.
+/// One path segment in `fillGeometry` or `strokeGeometry`, as returned by the Figma REST API.
 public struct FigmaVectorPath: Codable, Sendable {
     /// Winding rule for the path fill area ("EVENODD" or "NONZERO").
     public let windingRule: String?
     /// SVG path commands string (the `d` attribute value).
-    public let data: String
+    public let path: String
 }
 
 // MARK: - FigmaNode
@@ -392,16 +391,8 @@ public struct FigmaNode: Codable, Sendable {
 
     /// Raw characters in the text node.
     public let characters: String?
-    /// Typography style for the entire text node.
+    /// Typography style for the entire text node. Font family, size, weight, alignment, etc. are all here.
     public let style: FigmaTypeStyle?
-    /// Font size in points — Plugin API direct field on TextNode (REST API nests this in `style`).
-    public let fontSize: Double?
-    /// Font family + style — Plugin API direct field on TextNode (REST API nests this in `style`).
-    public let fontName: FigmaFontName?
-    /// Horizontal text alignment — Plugin API direct field on TextNode.
-    public let textAlignHorizontal: String?
-    /// Vertical text alignment — Plugin API direct field on TextNode.
-    public let textAlignVertical: String?
     /// Per-character style overrides; each value indexes into `styleOverrideTable`.
     public let characterStyleOverrides: [Int]?
     /// Map from override index → `FigmaTypeStyle`.
@@ -467,9 +458,11 @@ public struct FigmaNode: Codable, Sendable {
 
     // MARK: VectorNode
 
-    /// Path geometry of a VECTOR node, included in the raw plugin JSON export.
-    /// Each entry contains an SVG path `d` string and the winding rule for that path.
-    public let vectorPaths: [FigmaVectorPath]?
+    /// Fill geometry paths of a VECTOR node, as returned by the Figma REST API `fillGeometry` field.
+    public let fillGeometry: [FigmaVectorPath]?
+
+    /// Stroke geometry paths of a VECTOR node, as returned by the Figma REST API `strokeGeometry` field.
+    public let strokeGeometry: [FigmaVectorPath]?
 
     // MARK: - Convenience
 

@@ -92,5 +92,5 @@ public struct FigmaExportConstraint: Codable, Sendable {
 public struct FigmaExportSetting: Codable, Sendable {
     public let format: ExportFormat
     public let suffix: String
-    public let constraint: FigmaExportConstraint
+    public let constraint: FigmaExportConstraint?
 }
